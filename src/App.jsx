@@ -1,5 +1,7 @@
 import { useState } from "react";
 import IngredientSection from "./components/IngredientSection";
+import Pagination from "./components/pagination";
+import RecipeCard from "./components/RecipeCard";
 
 function App() {
   const ingredientsData = [
@@ -102,7 +104,7 @@ function App() {
   const [selectedIngredients, setSelectedIngredients] = useState([]);
   const [recipes, setRecipes] = useState([]);
   const [currentPage, setCurrentPage] = useState(1); // Track the current page
-  const recipesPerPage = 5; // Limit of 5 recipes per page
+  const recipesPerPage = 6; // Limit of 5 recipes per page
 
   const handleSelect = (ingredient) => {
     setSelectedIngredients((prevSelected) =>
@@ -147,11 +149,7 @@ function App() {
     }
   };
 
-  // Handle page change
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
-
+ 
   // Paginate recipes
   const paginateRecipes = () => {
     const indexOfLastRecipe = currentPage * recipesPerPage;
@@ -159,13 +157,19 @@ function App() {
     return recipes.slice(indexOfFirstRecipe, indexOfLastRecipe);
   };
 
+   // Handle page change
+   const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+
   // Calculate total number of pages
   const totalPages = Math.ceil(recipes.length / recipesPerPage);
 
   return (
     <div className="flex items-center justify-center bg-gray-100">
-      <div className="w-full bg-white rounded-lg shadow-lg p-6 max-w-7xl">
-        <h1 className="text-4xl font-bold text-center text-gray-800 mb-8">
+      <div className="w-full bg-white rounded-lg shadow-lg p-5 md:p-20">
+        <h1 className="text-4xl font-bold text-center text-gray-800 mb-8 title">
           Ingredients List
         </h1>
         <div className="space-y-4">
@@ -199,40 +203,18 @@ function App() {
         </div>
         {recipes.length > 0 && (
           <div className="mt-8">
-            <h2 className="text-2xl font-bold">Recipes:</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-4">
-              {paginateRecipes().map((recipe, index) => (
-                <div key={index} className="border rounded-lg p-4">
-                  <h3 className="text-xl font-semibold">{recipe.title}</h3>
-                  {/* Display recipe details */}
-                  <img
-                    src={recipe.image}
-                    alt={recipe.title}
-                    className="w-full h-64 object-cover rounded-lg mt-4"
-                  />
-                </div>
-              ))}
-            </div>
+            <h2 className="mb-10 text-2xl font-bold">Recipes:</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 mt-6 ml-14 mr-14">
+            {paginateRecipes().map((recipe, index) => (
+              <RecipeCard key={index} recipe={recipe} />
+            ))}
+          </div>
             {/* Pagination Controls */}
-            <div className="flex justify-center mt-6 space-x-4">
-              <button
-                onClick={() => handlePageChange(currentPage - 1)}
-                disabled={currentPage === 1}
-                className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded disabled:opacity-50"
-              >
-                Prev
-              </button>
-              <span className="text-lg">
-                Page {currentPage} of {totalPages}
-              </span>
-              <button
-                onClick={() => handlePageChange(currentPage + 1)}
-                disabled={currentPage === totalPages}
-                className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded disabled:opacity-50"
-              >
-                Next
-              </button>
-            </div>
+            <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
           </div>
         )}
 
