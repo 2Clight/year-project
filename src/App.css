@@ -18,6 +18,34 @@
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
+.landing-page {
+  padding: 50px;
+  background-color: #f9f9f9;
+}
+
+.landing-page h1 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+
+.landing-page p {
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+}
+
+.get-started-btn {
+  padding: 10px 20px;
+  font-size: 1rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.get-started-btn:hover {
+  background-color: #0056b3;
+}
 
 @keyframes logo-spin {
   from {
