@@ -1,8 +1,16 @@
-import React from "react";
+import axios from "axios";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function SignupPage() {
   const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleGoogleSignup = () => {
     // Mock Google signup logic here
@@ -13,10 +21,24 @@ function SignupPage() {
     navigate("/login"); // Redirect to login page
   };
 
-  const handleSignupSubmit = (event) => {
+  
+  const handleSignupSubmit = async (event) => {
     event.preventDefault();
-    // Signup logic here
-    alert("Account created successfully!");
+    setError(""); // Clear previous errors
+    setLoading(true); // Show loading state
+
+   axios
+   .post("http://localhost:5555/auth/signup", formData)
+   .then(()=>{
+    setLoading(false);
+    alert("success");
+    navigate("/login"); 
+   })
+   .catch((e)=>{
+    setLoading(false);
+    alert("failed");
+    console.log(e);
+   })
   };
 
   return (
