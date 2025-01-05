@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import IngredientSection from "../components/IngredientSection";
 import Pagination from "../components/pagination";
 import RecipeCard from "../components/RecipeCard";
-import ingredientsData from "../../data/ingredients"; 
+import ingredientsData from "../../data/ingredients";
+import { jwtDecode } from "jwt-decode";
 
 function IngredientPage() {
  
@@ -79,6 +81,37 @@ function IngredientPage() {
   // Calculate total number of pages
   const totalPages = Math.ceil(recipes.length / recipesPerPage);
 
+
+  //Autentication check
+
+  const [userData, setUserData] = useState();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = sessionStorage.getItem('token');
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+    try {
+      const decodedUser = jwtDecode(token);
+      setUserData(decodedUser);
+    } catch (error) {
+      console.log('Invalid token', error);
+      navigate('/login');
+      return;
+    }
+    setAuthChecked(true);
+    setLoading(false);
+    
+  }, []);
+
+  if (!authChecked || loading) {
+    return <Spinner />;
+  }
+
+
+  
   return (
     <div className="flex items-center justify-center bg-gray-100">
       <div className="w-full bg-white rounded-lg shadow-lg p-5 md:p-20">

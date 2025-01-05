@@ -2,12 +2,64 @@ import express, { response } from 'express';
 import { User } from '../models/userModel.js';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import { OAuth2Client } from 'google-auth-library';
 
 dotenv.config();
 
 const JWT_SECRET = process.env.JWT_SECRET;
+// const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 
 const router = express.Router();
+// const client = new OAuth2Client(GOOGLE_CLIENT_ID);
+
+// Route for Google Sign-In
+// router.post('/google-signin', async (request, response) => {
+//     try {
+//       const { token } = request.body;
+  
+//       // Verify the Google token
+//       const ticket = await client.verifyIdToken({
+//         idToken: token,
+//         audience: GOOGLE_CLIENT_ID,
+//       });
+  
+//       const payload = ticket.getPayload();
+//       const { sub: googleId, email, name, picture } = payload;
+  
+//       // Check if the user already exists
+//       let user = await User.findOne({ googleId });
+  
+//       if (!user) {
+//         // If the user doesn't exist, create a new user
+//         user = await User.create({
+//           googleId,
+//           email,
+//           username: name, // Using Google name as the username
+//           profilePicture: picture, // Optional field for profile picture
+//         });
+//       }
+  
+//       const userPageData = {
+//         id: user._id,
+//         username: user.username,
+//         email: user.email,
+//         profilePicture: user.profilePicture,
+//       };
+  
+//       // Generate a JWT for the user
+//       const authToken = jwt.sign(
+//         { id: user._id, email: user.email },
+//         JWT_SECRET,
+//         { expiresIn: '24h' }
+//       );
+  
+//       return response.status(200).json({ userPageData, token: authToken });
+//     } catch (error) {
+//       console.error('Error during Google Sign-In:', error.message);
+//       return response.status(500).json({ message: 'Google Sign-In failed' });
+//     }
+//   });
+  
 
 //route for sign up
 router.post('/signup', async (request, response) => {
